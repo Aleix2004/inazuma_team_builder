@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Formación</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='field.css') }}">
+</head>
+<body>
+
+  <h1>Formación: {{ formation }}</h1>
+
+  <form method="POST" action="{{ url_for('formation_view') }}" class="formation-form">
+    <label for="formation">Cambiar formación:</label>
+    <select name="formation" id="formation">
+      {% for f in formations %}
+        <option value="{{ f }}" {% if f == formation %}selected{% endif %}>{{ f }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Actualizar</button>
+  </form>
+
+  <div class="field f{{ formation|replace('-', '') }}">
+    {% if not team %}
+      <p class="empty">No hay jugadores en el equipo</p>
+    {% else %}
+      {% for jugador in team %}
+        <div class="player">{{ jugador.nombre }}</div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="back">
+    <a href="{{ url_for('team_view') }}">⬅ Volver al equipo</a>
+  </div>
+
+</body>
+</html>

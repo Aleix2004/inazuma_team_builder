@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipo Actual ⚽</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0077b6, #0096c7);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+        }
+
+        .player-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .player-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .player-position {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .position-portero { background: #ff6b6b; }
+        .position-defensa { background: #4ecdc4; }
+        .position-centrocampista { background: #ffe66d; color: #000; }
+        .position-delantero { background: #95e1d3; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #ffcc00;
+            color: black;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 10px 5px;
+            font-weight: bold;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #ffe066;
+            transform: scale(1.05);
+        }
+
+        .btn-remove {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .btn-remove:hover {
+            background: #ff5252;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            font-size: 1.2em;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ Tu Equipo Inazuma</h1>
+
+    {% if team %}
+        <div class="team-grid">
+            {% for j in team %}
+            <div class="player-card">
+                <img src="{{ j.foto }}" alt="{{ j.nombre }}" 
+                     class="player-photo"
+                     onerror="this.src='{{ url_for('static', filename='img/default.png') }}'">
+                <div class="player-name">{{ j.nombre }}</div>
+                <div class="player-position position-{{ j.posición|lower|replace(' ', '-') }}">
+                    {{ j.posición }}
+                </div>
+                <a class="btn btn-remove" href="{{ url_for('remove_from_team', nombre=j.nombre) }}">
+                    ❌ Quitar del equipo
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 30px;">
+            {% if team|length == 11 %}
+                <a class="btn" href="{{ url_for('formation_view') }}">⚽ Ver formación</a>
+            {% else %}
+                <p style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; max-width: 500px; margin: 20px auto;">
+                    ℹ️ Necesitas 11 jugadores para ver la formación (tienes {{ team|length }})
+                </p>
+            {% endif %}
+            <a class="btn" href="{{ url_for('index') }}">👥 Explorar jugadores</a>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">⚽</div>
+            <p>No hay jugadores en el equipo aún</p>
+            <p style="font-size: 0.9em; opacity: 0.8;">¡Añade jugadores para empezar a formar tu equipo!</p>
+            <a class="btn" href="{{ url_for('index') }}">👥 Explorar jugadores</a>
+        </div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,100 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0077b6, #0096c7);
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.player-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.player-card:hover {
+  transform: scale(1.05);
+}
+
+.player-photo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid #ffcc00;
+  object-fit: cover;
+}
+
+.player-name {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.player-position {
+  background: rgba(0,0,0,0.3);
+  padding: 5px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 5px 0;
+}
+
+.btn {
+  background: #ffcc00;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #ffe066;
+  transform: scale(1.05);
+}
+
+/* Panel de estadísticas */
+.team-stats {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  margin: 1rem auto 2rem;
+  width: 90%;
+  max-width: 600px;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.team-stats h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.stat {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 0.5rem;
+  font-size: 1rem;
+}

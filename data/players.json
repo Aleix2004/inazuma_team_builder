@@ -1,0 +1,132 @@
+[
+  {
+    "nombre": "Mark Evans",
+    "posición": "Portero",
+    "ataque": 40,
+    "defensa": 95,
+    "técnica": 85,
+    "resistencia": 90,
+    "dorsal": 1,
+    "foto": "/static/img/mark_evans.png"
+  },
+  {
+    "nombre": "Axel Blaze",
+    "posición": "Delantero",
+    "ataque": 95,
+    "defensa": 60,
+    "técnica": 88,
+    "resistencia": 80,
+    "dorsal": 10,
+    "foto": "/static/img/axel_blaze.png"
+  },
+  {
+    "nombre": "Jude Sharp",
+    "posición": "Centrocampista",
+    "ataque": 75,
+    "defensa": 70,
+    "técnica": 92,
+    "resistencia": 78,
+    "dorsal": 8,
+    "foto": "/static/img/jude_sharp.png"
+  },
+  {
+    "nombre": "Nathan Swift",
+    "posición": "Defensa",
+    "ataque": 60,
+    "defensa": 85,
+    "técnica": 75,
+    "resistencia": 88,
+    "dorsal": 5,
+    "foto": "/static/img/nathan_swift.png"
+  },
+  {
+    "nombre": "Kevin Dragonfly",
+    "posición": "Delantero",
+    "ataque": 90,
+    "defensa": 55,
+    "técnica": 70,
+    "resistencia": 82,
+    "dorsal": 11,
+    "foto": "/static/img/kevin_dragonfly.png"
+  },
+  {
+    "nombre": "Jack Wallside",
+    "posición": "Defensa",
+    "ataque": 58,
+    "defensa": 80,
+    "técnica": 68,
+    "resistencia": 77,
+    "dorsal": 4,
+    "foto": "/static/img/jack_wallside.png"
+  },
+  {
+    "nombre": "Hurley Kane",
+    "posición": "Centrocampista",
+    "ataque": 68,
+    "defensa": 72,
+    "técnica": 85,
+    "resistencia": 83,
+    "dorsal": 6,
+    "foto": "/static/img/hurley_kane.png"
+  },
+  {
+    "nombre": "Shawn Frost",
+    "posición": "Delantero",
+    "ataque": 92,
+    "defensa": 65,
+    "técnica": 80,
+    "resistencia": 75,
+    "dorsal": 9,
+    "foto": "/static/img/shawn_frost.png"
+  },
+  {
+    "nombre": "Byron Love",
+    "posición": "Centrocampista",
+    "ataque": 80,
+    "defensa": 70,
+    "técnica": 95,
+    "resistencia": 82,
+    "dorsal": 7,
+    "foto": "/static/img/byron_love.png"
+  },
+  {
+    "nombre": "Caleb Stonewall",
+    "posición": "Defensa",
+    "ataque": 55,
+    "defensa": 88,
+    "técnica": 72,
+    "resistencia": 85,
+    "dorsal": 3,
+    "foto": "/static/img/caleb_stonewall.png"
+  },
+  {
+    "nombre": "Darren LaChance",
+    "posición": "Portero",
+    "ataque": 30,
+    "defensa": 92,
+    "técnica": 80,
+    "resistencia": 89,
+    "dorsal": 12,
+    "foto": "/static/img/darren_lachance.png"
+  },
+  {
+    "nombre": "Xavier Foster",
+    "posición": "Centrocampista",
+    "ataque": 85,
+    "defensa": 68,
+    "técnica": 93,
+    "resistencia": 84,
+    "dorsal": 14,
+    "foto": "/static/img/xavier_foster.png"
+  },
+  {
+    "nombre": "Goldie Lemon",
+    "posición": "Defensa",
+    "ataque": 50,
+    "defensa": 82,
+    "técnica": 70,
+    "resistencia": 79,
+    "dorsal": 2,
+    "foto": "/static/img/goldie_lemon.png"
+  }
+]

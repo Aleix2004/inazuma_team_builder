@@ -1,0 +1,94 @@
+<h1>👥 Selecciona tu Equipo Inazuma</h1>
+
+<!-- Panel del equipo actual -->
+<div id="team-panel" style="margin-bottom: 20px;">
+  <h2>⚽ Equipo Actual ({{ team|length }})</h2>
+  <div id="team-list" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+</div>
+
+<!-- Panel de estadísticas -->
+<div class="team-stats">
+  <h2>📊 Estadísticas del Equipo</h2>
+  <div class="stats-grid">
+    <div class="stat">⚔️ Ataque: <span id="stat-ataque">{{ stats.ataque }}</span></div>
+    <div class="stat">🛡️ Defensa: <span id="stat-defensa">{{ stats.defensa }}</span></div>
+    <div class="stat">🎯 Técnica: <span id="stat-tecnica">{{ stats.tecnica }}</span></div>
+    <div class="stat">💨 Resistencia: <span id="stat-resistencia">{{ stats.resistencia }}</span></div>
+  </div>
+</div>
+
+<!-- Lista de jugadores -->
+<div class="players-grid" id="players-grid">
+  {% for p in players %}
+    <div class="player-card" data-nombre="{{ p.nombre }}">
+      <img src="{{ p.foto }}" alt="{{ p.nombre }}" class="player-photo">
+      <div class="player-name">{{ p.nombre }}</div>
+      <div class="player-position">{{ p.posición }}</div>
+      <button class="btn" onclick="addPlayer('{{ p.nombre }}', this)">➕ Añadir</button>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+let team = {{ team | tojson }};
+const players = {{ players | tojson }};
+
+// Inicializar panel del equipo
+function renderTeamPanel() {
+  const list = document.getElementById('team-list');
+  list.innerHTML = '';
+  team.forEach(p => {
+    const div = document.createElement('div');
+    div.style.background = '#ffcc00';
+    div.style.color = '#000';
+    div.style.padding = '5px 10px';
+    div.style.borderRadius = '8px';
+    div.style.fontWeight = 'bold';
+    div.textContent = p.nombre;
+    list.appendChild(div);
+  });
+  document.querySelector('#team-panel h2').textContent = `⚽ Equipo Actual (${team.length})`;
+}
+
+// Añadir jugador
+function addPlayer(nombre, btn) {
+  if (team.length >= 11) {
+    alert("Ya tienes 11 jugadores en el equipo");
+    return;
+  }
+  if (team.some(p => p.nombre === nombre)) {
+    alert("Este jugador ya está en tu equipo");
+    return;
+  }
+  const player = players.find(p => p.nombre === nombre);
+  if (!player) return;
+
+  team.push(player);
+  renderTeamPanel(); // Actualizar visualmente
+
+  // Desactivar botón
+  btn.disabled = true;
+  btn.textContent = "✅ En el equipo";
+  btn.style.background = "gray";
+  btn.style.cursor = "not-allowed";
+
+  // Guardar y actualizar estadísticas
+  fetch("/save_team", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ team, formation: "4-4-2" })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      document.getElementById("stat-ataque").textContent = data.stats.ataque;
+      document.getElementById("stat-defensa").textContent = data.stats.defensa;
+      document.getElementById("stat-tecnica").textContent = data.stats.tecnica;
+      document.getElementById("stat-resistencia").textContent = data.stats.resistencia;
+    }
+  });
+}
+
+// Render inicial
+renderTeamPanel();
+</script>
