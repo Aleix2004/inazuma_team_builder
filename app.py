@@ -1,13 +1,12 @@
-from flask import Flask, render_template, jsonify, request, url_for, redirect
+from flask import Flask, render_template, jsonify, request, url_for
 import json
 import os
 
 app = Flask(__name__)
 
-# Archivos dentro de /data
-DATA_DIR = "data"
-PLAYERS_FILE = os.path.join(DATA_DIR, "players.json")
-TEAM_FILE = os.path.join(DATA_DIR, "team_saved.json")
+# Archivos dentro de la carpeta "data"
+PLAYERS_FILE = "data/players.json"
+TEAM_FILE = "data/team_saved.json"
 
 # --- Cargar jugadores ---
 def load_players():
@@ -29,7 +28,7 @@ def load_team_data():
             return data, "4-4-2"
         return data.get("team", []), data.get("formation", "4-4-2")
 
-# --- Calcular estadísticas ---
+# --- Calcular estadísticas del equipo ---
 def calculate_team_stats(team):
     if not team:
         return {"ataque": 0, "defensa": 0, "tecnica": 0, "resistencia": 0}
@@ -42,13 +41,14 @@ def calculate_team_stats(team):
     n = len(team)
     return {k: round(v / n, 1) for k, v in total.items()}
 
-# --- Página principal ---
+# --- Página principal: explorar jugadores ---
 @app.route("/")
 def index():
     players = load_players()
     team, formation = load_team_data()
     stats = calculate_team_stats(team)
-    return render_template("index.html", players=players, team=team, formation=formation, stats=stats)
+    team_names = [p["nombre"] for p in team]
+    return render_template("index.html", players=players, team_names=team_names, stats=stats)
 
 # --- Ver equipo actual ---
 @app.route("/team")
@@ -57,34 +57,34 @@ def team_view():
     avg = calculate_team_stats(team)
     return render_template("team.html", team=team, avg=avg)
 
-# --- Añadir jugador al equipo ---
+# --- Añadir jugador al equipo (desde index.html) ---
 @app.route("/add_to_team/<nombre>")
 def add_to_team(nombre):
-    players = load_players()
     team, formation = load_team_data()
-
-    if any(p["nombre"] == nombre for p in team):
-        return redirect(url_for("team_view"))
-
+    players = load_players()
     if len(team) >= 11:
-        return redirect(url_for("team_view"))
-
+        return "Ya tienes 11 jugadores", 400
     player = next((p for p in players if p["nombre"] == nombre), None)
-    if player:
+    if player and not any(p["nombre"] == nombre for p in team):
         team.append(player)
         save_team_data(team, formation)
+    return team_view()
 
-    return redirect(url_for("team_view"))
-
-# --- Quitar jugador ---
+# --- Quitar jugador del equipo ---
 @app.route("/remove_from_team/<nombre>")
 def remove_from_team(nombre):
     team, formation = load_team_data()
     team = [p for p in team if p["nombre"] != nombre]
     save_team_data(team, formation)
-    return redirect(url_for("team_view"))
+    return team_view()
 
-# --- Guardar equipo desde JS ---
+# --- Resetear equipo ---
+@app.route("/reset_team")
+def reset_team():
+    save_team_data([], "4-4-2")
+    return team_view()
+
+# --- Guardar equipo vía AJAX ---
 @app.route("/save_team", methods=["POST"])
 def save_team():
     data = request.get_json()
@@ -94,32 +94,21 @@ def save_team():
     stats = calculate_team_stats(team)
     return jsonify({"success": True, "stats": stats})
 
-# --- Explorar jugadores ---
-@app.route("/explore")
-def explore_players():
-    players = load_players()
-    team, _ = load_team_data()
-    team_names = [p["nombre"] for p in team]
-    return render_template("explore.html", players=players, team_names=team_names)
-
 # --- Ver y cambiar formación ---
 @app.route("/formation", methods=["GET", "POST"])
 def formation_view():
-    team, formation = load_team_data()
+    team, current_formation = load_team_data()
     formations = ["4-4-2", "4-3-3", "3-5-2", "5-3-2"]
 
     if request.method == "POST":
-        new_formation = request.form.get("formation", formation)
+        new_formation = request.form.get("formation", current_formation)
         save_team_data(team, new_formation)
-        formation = new_formation
+        current_formation = new_formation
 
-    return render_template("formation.html", team=team, formation=formation, formations=formations)
-
-# --- Reiniciar equipo ---
-@app.route("/reset_team")
-def reset_team():
-    save_team_data([], "4-4-2")
-    return redirect(url_for("team_view"))
+    return render_template("formation.html",
+                           team=team,
+                           formation=current_formation,
+                           formations=formations)
 
 if __name__ == "__main__":
     app.run(debug=True)

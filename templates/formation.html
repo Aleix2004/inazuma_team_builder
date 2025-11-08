@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Formación</title>
+  <title>Formación ⚽</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='field.css') }}">
 </head>
 <body>
+  <h1>⚽ Formación {{ formation }}</h1>
 
-  <h1>Formación: {{ formation }}</h1>
-
-  <form method="POST" action="{{ url_for('formation_view') }}" class="formation-form">
-    <label for="formation">Cambiar formación:</label>
+  <!-- Formulario para cambiar formación -->
+  <form method="POST" action="{{ url_for('formation_view') }}" style="margin-bottom: 20px;">
+    <label for="formation">Selecciona formación:</label>
     <select name="formation" id="formation">
       {% for f in formations %}
         <option value="{{ f }}" {% if f == formation %}selected{% endif %}>{{ f }}</option>
@@ -19,19 +19,18 @@
     <button type="submit">Actualizar</button>
   </form>
 
-  <div class="field f{{ formation|replace('-', '') }}">
-    {% if not team %}
-      <p class="empty">No hay jugadores en el equipo</p>
-    {% else %}
-      {% for jugador in team %}
-        <div class="player">{{ jugador.nombre }}</div>
-      {% endfor %}
-    {% endif %}
+  <div class="field formation-{{ formation|replace('-', '_') }}">
+    {% for player in team %}
+      <div class="player-card">
+        <img src="{{ player.foto }}" alt="{{ player.nombre }}">
+        <span>{{ player.nombre }}</span>
+        <p>{{ player.posición }}</p>
+      </div>
+    {% endfor %}
   </div>
 
-  <div class="back">
-    <a href="{{ url_for('team_view') }}">⬅ Volver al equipo</a>
+  <div style="text-align: center; margin-top: 30px;">
+    <a class="btn" href="{{ url_for('team_view') }}">⬅️ Volver al equipo</a>
   </div>
-
 </body>
 </html>

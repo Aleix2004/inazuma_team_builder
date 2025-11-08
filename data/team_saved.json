@@ -11,14 +11,14 @@
       "técnica": 85
     },
     {
-      "ataque": 58,
-      "defensa": 80,
-      "dorsal": 4,
-      "foto": "/static/img/jack_wallside.png",
-      "nombre": "Jack Wallside",
-      "posición": "Defensa",
-      "resistencia": 77,
-      "técnica": 68
+      "ataque": 75,
+      "defensa": 70,
+      "dorsal": 8,
+      "foto": "/static/img/jude_sharp.png",
+      "nombre": "Jude Sharp",
+      "posición": "Centrocampista",
+      "resistencia": 78,
+      "técnica": 92
     },
     {
       "ataque": 60,
@@ -31,24 +31,14 @@
       "técnica": 75
     },
     {
-      "ataque": 80,
-      "defensa": 70,
-      "dorsal": 7,
-      "foto": "/static/img/byron_love.png",
-      "nombre": "Byron Love",
+      "ataque": 85,
+      "defensa": 68,
+      "dorsal": 14,
+      "foto": "/static/img/xavier_foster.png",
+      "nombre": "Xavier Foster",
       "posición": "Centrocampista",
-      "resistencia": 82,
-      "técnica": 95
-    },
-    {
-      "ataque": 75,
-      "defensa": 70,
-      "dorsal": 8,
-      "foto": "/static/img/jude_sharp.png",
-      "nombre": "Jude Sharp",
-      "posición": "Centrocampista",
-      "resistencia": 78,
-      "técnica": 92
+      "resistencia": 84,
+      "técnica": 93
     },
     {
       "ataque": 92,
@@ -61,44 +51,24 @@
       "técnica": 80
     },
     {
-      "ataque": 95,
-      "defensa": 60,
-      "dorsal": 10,
-      "foto": "/static/img/axel_blaze.png",
-      "nombre": "Axel Blaze",
-      "posición": "Delantero",
-      "resistencia": 80,
-      "técnica": 88
-    },
-    {
-      "ataque": 90,
-      "defensa": 55,
-      "dorsal": 11,
-      "foto": "/static/img/kevin_dragonfly.png",
-      "nombre": "Kevin Dragonfly",
-      "posición": "Delantero",
-      "resistencia": 82,
-      "técnica": 70
-    },
-    {
-      "ataque": 85,
-      "defensa": 68,
-      "dorsal": 14,
-      "foto": "/static/img/xavier_foster.png",
-      "nombre": "Xavier Foster",
+      "ataque": 68,
+      "defensa": 72,
+      "dorsal": 6,
+      "foto": "/static/img/hurley_kane.png",
+      "nombre": "Hurley Kane",
       "posición": "Centrocampista",
-      "resistencia": 84,
-      "técnica": 93
+      "resistencia": 83,
+      "técnica": 85
     },
     {
-      "ataque": 62,
-      "defensa": 84,
-      "dorsal": 15,
-      "foto": "/static/img/goldie_lemon.png",
-      "nombre": "Goldie Lemon",
+      "ataque": 58,
+      "defensa": 80,
+      "dorsal": 4,
+      "foto": "/static/img/jack_wallside.png",
+      "nombre": "Jack Wallside",
       "posición": "Defensa",
-      "resistencia": 80,
-      "técnica": 76
+      "resistencia": 77,
+      "técnica": 68
     },
     {
       "ataque": 55,
@@ -109,6 +79,36 @@
       "posición": "Defensa",
       "resistencia": 85,
       "técnica": 72
+    },
+    {
+      "ataque": 80,
+      "defensa": 70,
+      "dorsal": 7,
+      "foto": "/static/img/byron_love.png",
+      "nombre": "Byron Love",
+      "posición": "Centrocampista",
+      "resistencia": 82,
+      "técnica": 95
+    },
+    {
+      "nombre": "Goldie Lemon",
+      "posición": "Defensa",
+      "ataque": 50,
+      "defensa": 82,
+      "técnica": 70,
+      "resistencia": 79,
+      "dorsal": 2,
+      "foto": "/static/img/goldie_lemon.png"
+    },
+    {
+      "nombre": "Axel Blaze",
+      "posición": "Delantero",
+      "ataque": 95,
+      "defensa": 60,
+      "técnica": 88,
+      "resistencia": 80,
+      "dorsal": 10,
+      "foto": "/static/img/axel_blaze.png"
     }
   ],
   "formation": "4-4-2"
