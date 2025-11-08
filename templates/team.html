@@ -9,22 +9,36 @@
   <h1>⚡ Tu Equipo Actual</h1>
 
   {% if team %}
-  <div class="team-grid">
-    {% for j in team %}
-    <div class="player-card">
-      <img src="{{ j.foto }}" alt="{{ j.nombre }}">
-      <h3>{{ j.nombre }}</h3>
-      <p>{{ j.posición }}</p>
-      <a class="btn btn-remove" href="{{ url_for('remove_from_team', nombre=j.nombre) }}">❌ Quitar</a>
-    </div>
+  <!-- Sección de formación organizada por posiciones -->
+  <div id="formation-container">
+    {% set positions = ['Portero', 'Defensa', 'Medio', 'Delantero'] %}
+    {% for pos in positions %}
+      {% set players_by_pos = team | selectattr("posición", "equalto", pos) | list %}
+      {% if players_by_pos %}
+        <div class="position-row">
+          <h3>{{ pos }}{% if players_by_pos|length > 1 %}s{% endif %}</h3>
+          <div class="position-cards">
+            {% for player in players_by_pos %}
+              <div class="team-card">
+                <img src="{{ player.foto }}" alt="{{ player.nombre }}">
+                <h3>{{ player.nombre }}</h3>
+                <p>{{ player.posición }}</p>
+                <a class="btn btn-remove" href="{{ url_for('remove_from_team', nombre=player.nombre) }}">❌ Quitar</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     {% endfor %}
   </div>
 
+  <!-- Estadísticas del equipo -->
   <div style="margin-top: 20px;">
     <p><strong>📊 Promedios del equipo:</strong></p>
     <p>Ataque: {{ avg.ataque }} | Defensa: {{ avg.defensa }} | Técnica: {{ avg.tecnica }} | Resistencia: {{ avg.resistencia }}</p>
   </div>
 
+  <!-- Botón para ver formación -->
   {% if team|length == 11 %}
     <a class="btn" href="{{ url_for('formation_view') }}">⚽ Ver Formación</a>
   {% else %}
@@ -37,5 +51,6 @@
     <p>No hay jugadores en el equipo aún.</p>
     <a class="btn" href="{{ url_for('index') }}">👥 Añadir Jugadores</a>
   {% endif %}
+
 </body>
 </html>

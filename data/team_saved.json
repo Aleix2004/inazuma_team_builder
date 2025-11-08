@@ -51,16 +51,6 @@
       "técnica": 80
     },
     {
-      "ataque": 68,
-      "defensa": 72,
-      "dorsal": 6,
-      "foto": "/static/img/hurley_kane.png",
-      "nombre": "Hurley Kane",
-      "posición": "Centrocampista",
-      "resistencia": 83,
-      "técnica": 85
-    },
-    {
       "ataque": 58,
       "defensa": 80,
       "dorsal": 4,
@@ -91,24 +81,34 @@
       "técnica": 95
     },
     {
-      "nombre": "Goldie Lemon",
-      "posición": "Defensa",
       "ataque": 50,
       "defensa": 82,
-      "técnica": 70,
-      "resistencia": 79,
       "dorsal": 2,
-      "foto": "/static/img/goldie_lemon.png"
+      "foto": "/static/img/goldie_lemon.png",
+      "nombre": "Goldie Lemon",
+      "posición": "Defensa",
+      "resistencia": 79,
+      "técnica": 70
     },
     {
-      "nombre": "Axel Blaze",
-      "posición": "Delantero",
       "ataque": 95,
       "defensa": 60,
-      "técnica": 88,
-      "resistencia": 80,
       "dorsal": 10,
-      "foto": "/static/img/axel_blaze.png"
+      "foto": "/static/img/axel_blaze.png",
+      "nombre": "Axel Blaze",
+      "posición": "Delantero",
+      "resistencia": 80,
+      "técnica": 88
+    },
+    {
+      "ataque": 68,
+      "defensa": 72,
+      "dorsal": 6,
+      "foto": "/static/img/hurley_kane.png",
+      "nombre": "Hurley Kane",
+      "posición": "Centrocampista",
+      "resistencia": 83,
+      "técnica": 85
     }
   ],
   "formation": "4-4-2"

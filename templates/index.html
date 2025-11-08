@@ -41,7 +41,7 @@
   <!-- Equipo actual -->
   <section id="team-section">
     <h2>🧤 Tu Equipo Actual ({{ team|length }}/11)</h2>
-    <div id="team-list" class="team-grid">
+    <div id="team-list">
       {% for member in team %}
       <div class="team-card">
         <img src="{{ member.foto }}" alt="{{ member.nombre }}">
@@ -60,6 +60,11 @@
 
   <script>
     let team = {{ team|tojson }};
+    const players = {{ players|tojson }};
+
+    function getPlayerByName(name) {
+      return players.find(p => p.nombre === name);
+    }
 
     function addToTeam(name) {
       if (team.length >= 11) {
@@ -67,20 +72,24 @@
         return;
       }
 
+      const player = getPlayerByName(name);
+      if (!player) return;
+
       fetch('/save_team', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ team: [...team, getPlayerByName(name)], formation: "4-4-2" })
+        body: JSON.stringify({ team: [...team, player], formation: "4-4-2" })
       })
       .then(res => res.json())
       .then(data => {
-        team.push(getPlayerByName(name));
+        team.push(player);
         location.reload();
       });
     }
 
     function removeFromTeam(name) {
       team = team.filter(p => p.nombre !== name);
+
       fetch('/save_team', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -88,11 +97,6 @@
       })
       .then(res => res.json())
       .then(() => location.reload());
-    }
-
-    function getPlayerByName(name) {
-      const players = {{ players|tojson }};
-      return players.find(p => p.nombre === name);
     }
   </script>
 </body>

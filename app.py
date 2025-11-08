@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, url_for
+from flask import Flask, render_template, jsonify, request
 import json
 import os
 
@@ -36,7 +36,7 @@ def calculate_team_stats(team):
     for player in team:
         total["ataque"] += player.get("ataque", 0)
         total["defensa"] += player.get("defensa", 0)
-        total["tecnica"] += player.get("técnica", 0)
+        total["tecnica"] += player.get("tecnica", player.get("técnica", 0))
         total["resistencia"] += player.get("resistencia", 0)
     n = len(team)
     return {k: round(v / n, 1) for k, v in total.items()}
@@ -46,9 +46,15 @@ def calculate_team_stats(team):
 def index():
     players = load_players()
     team, formation = load_team_data()
+    if team is None:
+        team = []
     stats = calculate_team_stats(team)
-    team_names = [p["nombre"] for p in team]
-    return render_template("index.html", players=players, team_names=team_names, stats=stats)
+    return render_template(
+        "index.html",
+        players=players,
+        team=team,
+        stats=stats
+    )
 
 # --- Ver equipo actual ---
 @app.route("/team")
@@ -57,7 +63,7 @@ def team_view():
     avg = calculate_team_stats(team)
     return render_template("team.html", team=team, avg=avg)
 
-# --- Añadir jugador al equipo (desde index.html) ---
+# --- Añadir jugador al equipo (desde AJAX) ---
 @app.route("/add_to_team/<nombre>")
 def add_to_team(nombre):
     team, formation = load_team_data()
