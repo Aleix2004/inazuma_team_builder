@@ -1,120 +1,112 @@
-from flask import Flask, render_template, jsonify, request
-import json
-import os
+from flask import Flask, render_template, redirect, url_for, session, request
+import json, os
 
 app = Flask(__name__)
+app.secret_key = "super_secret_key"
 
-# Archivos dentro de la carpeta "data"
-PLAYERS_FILE = "data/players.json"
-TEAM_FILE = "data/team_saved.json"
-
-# --- Cargar jugadores ---
+# ------------------ Cargar jugadores ------------------
 def load_players():
-    with open(PLAYERS_FILE, "r", encoding="utf-8") as f:
+    with open("data/players.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# --- Guardar equipo ---
-def save_team_data(team, formation):
-    with open(TEAM_FILE, "w", encoding="utf-8") as f:
-        json.dump({"team": team, "formation": formation}, f, ensure_ascii=False, indent=2)
-
-# --- Cargar equipo ---
-def load_team_data():
-    if not os.path.exists(TEAM_FILE):
-        return [], "4-4-2"
-    with open(TEAM_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-        if isinstance(data, list):
-            return data, "4-4-2"
-        return data.get("team", []), data.get("formation", "4-4-2")
-
-# --- Calcular estadísticas del equipo ---
-def calculate_team_stats(team):
+# ------------------ Estadísticas ------------------
+def calculate_stats(team):
     if not team:
         return {"ataque": 0, "defensa": 0, "tecnica": 0, "resistencia": 0}
-    total = {"ataque": 0, "defensa": 0, "tecnica": 0, "resistencia": 0}
-    for player in team:
-        total["ataque"] += player.get("ataque", 0)
-        total["defensa"] += player.get("defensa", 0)
-        total["tecnica"] += player.get("tecnica", player.get("técnica", 0))
-        total["resistencia"] += player.get("resistencia", 0)
     n = len(team)
-    return {k: round(v / n, 1) for k, v in total.items()}
+    return {
+        "ataque": round(sum(p["ataque"] for p in team)/n, 1),
+        "defensa": round(sum(p["defensa"] for p in team)/n, 1),
+        "tecnica": round(sum(p["técnica"] for p in team)/n, 1),
+        "resistencia": round(sum(p["resistencia"] for p in team)/n, 1),
+    }
 
-# --- Página principal: explorar jugadores ---
+# ------------------ Página principal ------------------
 @app.route("/")
 def index():
+    if "team" not in session:
+        session["team"] = []
     players = load_players()
-    team, formation = load_team_data()
-    if team is None:
-        team = []
-    stats = calculate_team_stats(team)
-    return render_template(
-        "index.html",
-        players=players,
-        team=team,
-        stats=stats
-    )
+    team = session["team"]
+    stats = calculate_stats(team)
+    return render_template("index.html", players=players, team=team, stats=stats)
 
-# --- Ver equipo actual ---
+# ------------------ Explorar jugadores ------------------
+@app.route("/explore")
+def explore_players():
+    if "team" not in session:
+        session["team"] = []
+    players = load_players()
+    team = session["team"]
+    return render_template("explore.html", players=players, team=team)
+
+# ------------------ Añadir jugador ------------------
+@app.route("/add/<nombre>")
+def add_to_team(nombre):
+    if "team" not in session:
+        session["team"] = []
+    team = session["team"]
+    players = load_players()
+
+    if len(team) >= 11:
+        return redirect(url_for("team_view"))
+
+    player = next((p for p in players if p["nombre"] == nombre), None)
+    if player and player not in team:
+        team.append(player)
+        session["team"] = team
+    return redirect(url_for("explore_players"))
+
+# ------------------ Quitar jugador ------------------
+@app.route("/remove/<nombre>")
+def remove_from_team(nombre):
+    if "team" not in session:
+        session["team"] = []
+    team = session["team"]
+    team = [p for p in team if p["nombre"] != nombre]
+    session["team"] = team
+    return redirect(url_for("team_view"))
+
+# ------------------ Ver equipo ------------------
 @app.route("/team")
 def team_view():
-    team, formation = load_team_data()
-    avg = calculate_team_stats(team)
-    return render_template("team.html", team=team, avg=avg)
+    if "team" not in session:
+        session["team"] = []
+    team = session["team"]
+    stats = calculate_stats(team)
+    return render_template("team.html", team=team, avg=stats)
 
-# --- Añadir jugador al equipo (desde AJAX) ---
-@app.route("/add_to_team/<nombre>")
-def add_to_team(nombre):
-    team, formation = load_team_data()
-    players = load_players()
-    if len(team) >= 11:
-        return "Ya tienes 11 jugadores", 400
-    player = next((p for p in players if p["nombre"] == nombre), None)
-    if player and not any(p["nombre"] == nombre for p in team):
-        team.append(player)
-        save_team_data(team, formation)
-    return team_view()
-
-# --- Quitar jugador del equipo ---
-@app.route("/remove_from_team/<nombre>")
-def remove_from_team(nombre):
-    team, formation = load_team_data()
-    team = [p for p in team if p["nombre"] != nombre]
-    save_team_data(team, formation)
-    return team_view()
-
-# --- Resetear equipo ---
-@app.route("/reset_team")
-def reset_team():
-    save_team_data([], "4-4-2")
-    return team_view()
-
-# --- Guardar equipo vía AJAX ---
-@app.route("/save_team", methods=["POST"])
-def save_team():
-    data = request.get_json()
-    team = data.get("team", [])
-    formation = data.get("formation", "4-4-2")
-    save_team_data(team, formation)
-    stats = calculate_team_stats(team)
-    return jsonify({"success": True, "stats": stats})
-
-# --- Ver y cambiar formación ---
+# ------------------ Ver formación ------------------
 @app.route("/formation", methods=["GET", "POST"])
 def formation_view():
-    team, current_formation = load_team_data()
+    if "team" not in session:
+        session["team"] = []
+    team = session["team"]
+
+    # Definir formaciones disponibles
     formations = ["4-4-2", "4-3-3", "3-5-2", "5-3-2"]
+    if "formation" not in session:
+        session["formation"] = "4-4-2"
 
     if request.method == "POST":
-        new_formation = request.form.get("formation", current_formation)
-        save_team_data(team, new_formation)
-        current_formation = new_formation
+        new_formation = request.form.get("formation")
+        if new_formation in formations:
+            session["formation"] = new_formation
 
-    return render_template("formation.html",
-                           team=team,
-                           formation=current_formation,
-                           formations=formations)
+    return render_template(
+        "formation.html",
+        team=team,
+        formation=session["formation"],
+        formations=formations
+    )
 
+# ------------------ Resetear equipo ------------------
+@app.route("/reset_team")
+def reset_team():
+    session["team"] = []
+    session["formation"] = "4-4-2"
+    return redirect(url_for("index"))
+
+# ------------------ Ejecutar ------------------
 if __name__ == "__main__":
     app.run(debug=True)

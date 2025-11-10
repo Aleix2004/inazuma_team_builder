@@ -82,15 +82,21 @@ h1 {
 }
 
 /* ---------------- Equipo actual ---------------- */
-#team-list {
-  display: flex;
-  flex-wrap: wrap;
+#team-list,
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
-  justify-content: center;
+  justify-items: center;
   margin-top: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.team-card {
+.team-card,
+.team-grid .player-card {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 10px;
@@ -100,7 +106,8 @@ h1 {
   flex-shrink: 0;
 }
 
-.team-card img {
+.team-card img,
+.team-grid .player-card img {
   width: 90px;
   height: 90px;
   object-fit: cover;

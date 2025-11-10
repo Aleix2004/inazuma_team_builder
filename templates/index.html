@@ -2,102 +2,59 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Inazuma Eleven - Selección de Equipo</title>
+  <title>Inazuma Team Builder ⚡</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>⚡ Inazuma Eleven - Crea tu Equipo</h1>
+  <header>
+    <h1>⚡ Inazuma Team Builder ⚡</h1>
+    <p>¡Crea tu equipo definitivo de Inazuma Eleven!</p>
+  </header>
 
-  <!-- Estadísticas del equipo -->
+  <!-- Sección de estadísticas -->
   <section id="stats">
     <h2>📊 Estadísticas del equipo</h2>
-    <div class="stats-container">
-      <p><strong>Ataque:</strong> {{ stats.ataque }}</p>
-      <p><strong>Defensa:</strong> {{ stats.defensa }}</p>
-      <p><strong>Técnica:</strong> {{ stats.tecnica }}</p>
-      <p><strong>Resistencia:</strong> {{ stats.resistencia }}</p>
-    </div>
-  </section>
-
-  <!-- Lista de jugadores disponibles -->
-  <section id="players">
-    <h2>👥 Jugadores disponibles</h2>
-    <div class="player-grid">
-      {% for player in players %}
-      <div class="player-card">
-        <img src="{{ player.foto }}" alt="{{ player.nombre }}">
-        <h3>{{ player.nombre }}</h3>
-        <p>{{ player.posición }}</p>
-        <p>⚔️ Ataque: {{ player.ataque }}</p>
-        <p>🛡️ Defensa: {{ player.defensa }}</p>
-        <p>🎯 Técnica: {{ player.técnica }}</p>
-        <p>💪 Resistencia: {{ player.resistencia }}</p>
-        <button class="add-btn" onclick="addToTeam('{{ player.nombre }}')">➕ Añadir al equipo</button>
+    {% if team and stats %}
+      <div class="stats-container">
+        <p><strong>Ataque:</strong> {{ stats.ataque }}</p>
+        <p><strong>Defensa:</strong> {{ stats.defensa }}</p>
+        <p><strong>Técnica:</strong> {{ stats.tecnica }}</p>
+        <p><strong>Resistencia:</strong> {{ stats.resistencia }}</p>
       </div>
-      {% endfor %}
-    </div>
+    {% else %}
+      <p>No hay jugadores todavía. ¡Empieza a crear tu equipo!</p>
+    {% endif %}
   </section>
 
-  <!-- Equipo actual -->
-  <section id="team-section">
-    <h2>🧤 Tu Equipo Actual ({{ team|length }}/11)</h2>
-    <div id="team-list">
-      {% for member in team %}
-      <div class="team-card">
-        <img src="{{ member.foto }}" alt="{{ member.nombre }}">
-        <h3>{{ member.nombre }}</h3>
-        <p>{{ member.posición }}</p>
-        <button class="remove-btn" onclick="removeFromTeam('{{ member.nombre }}')">❌ Quitar</button>
+  <!-- Botones principales -->
+  <section id="actions">
+    <a href="{{ url_for('explore_players') }}" class="btn">⚙️ Explorar Jugadores</a>
+    <a href="{{ url_for('team_view') }}" class="btn">👥 Ver Mi Equipo</a>
+    <a href="{{ url_for('formation_view') }}" class="btn">🏟️ Ver Formación</a>
+  </section>
+
+  <!-- Vista previa del equipo actual -->
+  <section id="current-team">
+    <h2>🔥 Tu equipo actual ({{ team|length }}/11)</h2>
+    {% if team %}
+      <div class="team-grid">
+        {% for p in team %}
+          <div class="player-card">
+            <img src="{{ p.foto }}" alt="{{ p.nombre }}">
+            <h3>{{ p.nombre }}</h3>
+            <p>{{ p.posición }}</p>
+            <p>⚔️ {{ p.ataque }} | 🛡️ {{ p.defensa }}</p>
+            <p>🎯 {{ p.técnica }} | 💪 {{ p.resistencia }}</p>
+          </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
-
-    <!-- Botón para ver formación -->
-    <div id="view-formation" style="display: {{ 'block' if team|length == 11 else 'none' }}; text-align:center; margin-top:20px;">
-      <a href="/formation" class="btn">⚽ Ver Formación</a>
-    </div>
+    {% else %}
+      <p>Aún no has añadido jugadores. 💫</p>
+    {% endif %}
   </section>
 
-  <script>
-    let team = {{ team|tojson }};
-    const players = {{ players|tojson }};
-
-    function getPlayerByName(name) {
-      return players.find(p => p.nombre === name);
-    }
-
-    function addToTeam(name) {
-      if (team.length >= 11) {
-        alert("⚠️ Ya tienes 11 jugadores en tu equipo.");
-        return;
-      }
-
-      const player = getPlayerByName(name);
-      if (!player) return;
-
-      fetch('/save_team', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ team: [...team, player], formation: "4-4-2" })
-      })
-      .then(res => res.json())
-      .then(data => {
-        team.push(player);
-        location.reload();
-      });
-    }
-
-    function removeFromTeam(name) {
-      team = team.filter(p => p.nombre !== name);
-
-      fetch('/save_team', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ team: team, formation: "4-4-2" })
-      })
-      .then(res => res.json())
-      .then(() => location.reload());
-    }
-  </script>
+  <footer>
+    <p>Desarrollado por ⚡ Inazuma Team Builder ⚡</p>
+  </footer>
 </body>
 </html>
