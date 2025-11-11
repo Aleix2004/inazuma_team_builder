@@ -1,115 +1,122 @@
-{
-  "team": [
-    {
-      "ataque": 40,
-      "defensa": 95,
-      "dorsal": 1,
-      "foto": "/static/img/mark_evans.png",
-      "nombre": "Mark Evans",
-      "posición": "Portero",
-      "resistencia": 90,
-      "técnica": 85
-    },
-    {
-      "ataque": 75,
-      "defensa": 70,
-      "dorsal": 8,
-      "foto": "/static/img/jude_sharp.png",
-      "nombre": "Jude Sharp",
-      "posición": "Centrocampista",
-      "resistencia": 78,
-      "técnica": 92
-    },
-    {
-      "ataque": 60,
-      "defensa": 85,
-      "dorsal": 5,
-      "foto": "/static/img/nathan_swift.png",
-      "nombre": "Nathan Swift",
-      "posición": "Defensa",
-      "resistencia": 88,
-      "técnica": 75
-    },
-    {
-      "ataque": 85,
-      "defensa": 68,
-      "dorsal": 14,
-      "foto": "/static/img/xavier_foster.png",
-      "nombre": "Xavier Foster",
-      "posición": "Centrocampista",
-      "resistencia": 84,
-      "técnica": 93
-    },
-    {
-      "ataque": 92,
-      "defensa": 65,
-      "dorsal": 9,
-      "foto": "/static/img/shawn_frost.png",
-      "nombre": "Shawn Frost",
-      "posición": "Delantero",
-      "resistencia": 75,
-      "técnica": 80
-    },
-    {
-      "ataque": 58,
-      "defensa": 80,
-      "dorsal": 4,
-      "foto": "/static/img/jack_wallside.png",
-      "nombre": "Jack Wallside",
-      "posición": "Defensa",
-      "resistencia": 77,
-      "técnica": 68
-    },
-    {
-      "ataque": 55,
-      "defensa": 88,
-      "dorsal": 3,
-      "foto": "/static/img/caleb_stonewall.png",
-      "nombre": "Caleb Stonewall",
-      "posición": "Defensa",
-      "resistencia": 85,
-      "técnica": 72
-    },
-    {
-      "ataque": 80,
-      "defensa": 70,
-      "dorsal": 7,
-      "foto": "/static/img/byron_love.png",
-      "nombre": "Byron Love",
-      "posición": "Centrocampista",
-      "resistencia": 82,
-      "técnica": 95
-    },
-    {
-      "ataque": 50,
-      "defensa": 82,
-      "dorsal": 2,
-      "foto": "/static/img/goldie_lemon.png",
-      "nombre": "Goldie Lemon",
-      "posición": "Defensa",
-      "resistencia": 79,
-      "técnica": 70
-    },
-    {
-      "ataque": 95,
-      "defensa": 60,
-      "dorsal": 10,
-      "foto": "/static/img/axel_blaze.png",
-      "nombre": "Axel Blaze",
-      "posición": "Delantero",
-      "resistencia": 80,
-      "técnica": 88
-    },
-    {
-      "ataque": 68,
-      "defensa": 72,
-      "dorsal": 6,
-      "foto": "/static/img/hurley_kane.png",
-      "nombre": "Hurley Kane",
-      "posición": "Centrocampista",
-      "resistencia": 83,
-      "técnica": 85
-    }
-  ],
-  "formation": "4-4-2"
-}
+[
+  {
+    "ataque": 40,
+    "defensa": 95,
+    "dorsal": 1,
+    "foto": "/static/img/mark_evans.png",
+    "nombre": "Mark Evans",
+    "posición": "Portero",
+    "resistencia": 90,
+    "técnica": 85
+  },
+  {
+    "ataque": 58,
+    "defensa": 80,
+    "dorsal": 4,
+    "foto": "/static/img/jack_wallside.png",
+    "nombre": "Jack Wallside",
+    "pos_x": 34.7,
+    "pos_y": 68.8,
+    "posición": "Defensa",
+    "resistencia": 77,
+    "técnica": 68
+  },
+  {
+    "ataque": 60,
+    "defensa": 85,
+    "dorsal": 5,
+    "foto": "/static/img/nathan_swift.png",
+    "nombre": "Nathan Swift",
+    "pos_x": 14.5,
+    "pos_y": 67.7,
+    "posición": "Defensa",
+    "resistencia": 88,
+    "técnica": 75
+  },
+  {
+    "ataque": 50,
+    "defensa": 82,
+    "dorsal": 2,
+    "foto": "/static/img/goldie_lemon.png",
+    "nombre": "Goldie Lemon",
+    "posición": "Defensa",
+    "resistencia": 79,
+    "técnica": 70
+  },
+  {
+    "ataque": 55,
+    "defensa": 88,
+    "dorsal": 3,
+    "foto": "/static/img/caleb_stonewall.png",
+    "nombre": "Caleb Stonewall",
+    "posición": "Defensa",
+    "resistencia": 85,
+    "técnica": 72
+  },
+  {
+    "ataque": 80,
+    "defensa": 70,
+    "dorsal": 7,
+    "foto": "/static/img/byron_love.png",
+    "nombre": "Byron Love",
+    "posición": "Centrocampista",
+    "resistencia": 82,
+    "técnica": 95
+  },
+  {
+    "ataque": 85,
+    "defensa": 68,
+    "dorsal": 14,
+    "foto": "/static/img/xavier_foster.png",
+    "nombre": "Xavier Foster",
+    "posición": "Centrocampista",
+    "resistencia": 84,
+    "técnica": 93
+  },
+  {
+    "ataque": 75,
+    "defensa": 70,
+    "dorsal": 8,
+    "foto": "/static/img/jude_sharp.png",
+    "nombre": "Jude Sharp",
+    "posición": "Centrocampista",
+    "resistencia": 78,
+    "técnica": 92
+  },
+  {
+    "ataque": 95,
+    "defensa": 60,
+    "dorsal": 10,
+    "foto": "/static/img/axel_blaze.png",
+    "nombre": "Axel Blaze",
+    "pos_x": 28.5,
+    "pos_y": 16.8,
+    "posición": "Delantero",
+    "resistencia": 80,
+    "técnica": 88
+  },
+  {
+    "ataque": 92,
+    "defensa": 65,
+    "dorsal": 9,
+    "foto": "/static/img/shawn_frost.png",
+    "nombre": "Shawn Frost",
+    "pos_x": 49.9,
+    "pos_y": 17.4,
+    "posición": "Delantero",
+    "resistencia": 75,
+    "técnica": 80
+  },
+  {
+    "ataque": 90,
+    "defensa": 55,
+    "dorsal": 11,
+    "foto": "/static/img/kevin_dragonfly.png",
+    "nombre": "Kevin Dragonfly",
+    "pos_x": 72.1,
+    "pos_y": 18.6,
+    "posición": "Delantero",
+    "resistencia": 82,
+    "técnica": 70
+  }
+]

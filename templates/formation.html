@@ -7,10 +7,8 @@
   <style>
     .player-card {
       cursor: grab;
-      transition: left 0.1s, top 0.1s;
-    }
-    .player-card:active {
-      cursor: grabbing;
+      user-select: none;
+      transition: all 0.3s;
     }
   </style>
 </head>
@@ -28,10 +26,16 @@
     <button class="btn" type="submit">Actualizar</button>
   </form>
 
+  <!-- Botón Restablecer -->
+  <div style="margin-bottom: 20px;">
+    <a class="btn" href="{{ url_for('reset_formation') }}">🔄 Restablecer formación</a>
+  </div>
+
   <!-- Campo de fútbol -->
-  <div class="field formation-{{ formation|replace('-', '_') }}">
+  <div class="field">
     {% for player in team %}
-      <div class="player-card">
+      <div class="player-card" 
+           style="top: {{ player.pos_y if player.pos_y is defined else 50 }}%; left: {{ player.pos_x if player.pos_x is defined else 50 }}%;">
         <img src="{{ player.foto }}" alt="{{ player.nombre }}">
         <span>{{ player.nombre }}</span>
         <p>{{ player.posición }}</p>
@@ -39,49 +43,43 @@
     {% endfor %}
   </div>
 
-  <!-- Botones -->
+  <!-- Botones de navegación -->
   <div style="text-align:center; margin-top: 30px;">
     <a class="btn" href="{{ url_for('team_view') }}">⬅️ Volver al equipo</a>
     <a class="btn" href="{{ url_for('index') }}">🏠 Inicio</a>
   </div>
 
-  <!-- Script para arrastrar jugadores -->
   <script>
-    const field = document.querySelector('.field');
+    // Arrastrar jugadores con el ratón
     const players = document.querySelectorAll('.player-card');
-
     players.forEach(player => {
+      let isDragging = false;
       let offsetX, offsetY;
 
       player.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        const rect = player.getBoundingClientRect();
-        const fieldRect = field.getBoundingClientRect();
+        isDragging = true;
+        offsetX = e.offsetX;
+        offsetY = e.offsetY;
+        player.style.cursor = 'grabbing';
+      });
 
-        // Calculamos offset relativo a la posición actual
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-
-        function onMouseMove(eMove) {
-          let left = eMove.clientX - fieldRect.left - offsetX;
-          let top = eMove.clientY - fieldRect.top - offsetY;
-
-          // Limitar dentro del campo
-          left = Math.max(0, Math.min(left, fieldRect.width - rect.width));
-          top = Math.max(0, Math.min(top, fieldRect.height - rect.height));
-
-          player.style.left = `${left}px`;
-          player.style.top = `${top}px`;
-          player.style.position = "absolute"; // hacemos absoluto solo al arrastrar
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          const rect = player.parentElement.getBoundingClientRect();
+          let x = ((e.clientX - rect.left - offsetX) / rect.width) * 100;
+          let y = ((e.clientY - rect.top - offsetY) / rect.height) * 100;
+          x = Math.min(95, Math.max(0, x));
+          y = Math.min(95, Math.max(0, y));
+          player.style.left = x + '%';
+          player.style.top = y + '%';
         }
+      });
 
-        function onMouseUp() {
-          document.removeEventListener('mousemove', onMouseMove);
-          document.removeEventListener('mouseup', onMouseUp);
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          player.style.cursor = 'grab';
         }
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
       });
     });
   </script>

@@ -108,6 +108,45 @@ def formation_view():
     formation = session.get("formation", "4-4-2")
     return render_template("formation.html", team=team, formation=formation, formations=formations)
 
+# ------------------ Restablecer posiciones originales ------------------
+
+@app.route("/reset_formation")
+def reset_formation():
+    team = session.get("team", load_team())
+    formation = session.get("formation", "4-4-2")
+
+    # Posiciones originales según la formación
+    positions = {
+        "4-4-2": [
+            {"x":50,"y":90},{"x":20,"y":70},{"x":40,"y":70},{"x":60,"y":70},{"x":80,"y":70},
+            {"x":20,"y":50},{"x":40,"y":50},{"x":60,"y":50},{"x":80,"y":50},
+            {"x":35,"y":25},{"x":65,"y":25}
+        ],
+        "4-3-3": [
+            {"x":50,"y":90},{"x":20,"y":70},{"x":40,"y":70},{"x":60,"y":70},{"x":80,"y":70},
+            {"x":30,"y":50},{"x":50,"y":50},{"x":70,"y":50},
+            {"x":25,"y":25},{"x":50,"y":25},{"x":75,"y":25}
+        ],
+        "3-5-2": [
+            {"x":50,"y":90},{"x":30,"y":70},{"x":50,"y":70},{"x":70,"y":70},
+            {"x":20,"y":55},{"x":40,"y":55},{"x":60,"y":55},{"x":80,"y":55},{"x":50,"y":40},
+            {"x":40,"y":25},{"x":60,"y":25}
+        ],
+        "5-3-2": [
+            {"x":50,"y":90},{"x":15,"y":70},{"x":35,"y":70},{"x":50,"y":70},{"x":65,"y":70},{"x":85,"y":70},
+            {"x":35,"y":50},{"x":50,"y":50},{"x":65,"y":50},
+            {"x":40,"y":25},{"x":60,"y":25}
+        ]
+    }
+
+    for i, player in enumerate(team):
+        if i < len(positions[formation]):
+            player["pos_x"] = positions[formation][i]["x"]
+            player["pos_y"] = positions[formation][i]["y"]
+
+    session["team"] = team
+    return redirect(url_for("formation_view"))
+
 # ------------------ Ejecutar ------------------
 
 if __name__ == "__main__":
