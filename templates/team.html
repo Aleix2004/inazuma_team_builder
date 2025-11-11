@@ -11,7 +11,7 @@
   {% if team %}
   <!-- Sección de formación organizada por posiciones -->
   <div id="formation-container">
-    {% set positions = ['Portero', 'Defensa', 'Medio', 'Delantero'] %}
+    {% set positions = ['Portero', 'Defensa', 'Centrocampista', 'Delantero'] %}
     {% for pos in positions %}
       {% set players_by_pos = team | selectattr("posición", "equalto", pos) | list %}
       {% if players_by_pos %}

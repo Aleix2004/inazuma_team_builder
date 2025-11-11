@@ -2,36 +2,38 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>⚽ Formación del Equipo</title>
+  <title>Formación ⚽</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='field.css') }}">
 </head>
 <body>
-  <h1>⚡ Formación del Equipo ({{ formation.replace('_', '-') }})</h1>
+  <h1>⚽ Formación {{ formation }}</h1>
 
-  <!-- Selector de formación -->
-  <form method="post" action="{{ url_for('formation_view') }}" style="margin-bottom: 20px;">
-    <label for="formation">Elegir formación:</label>
+  <!-- Selector de formaciones -->
+  <form action="{{ url_for('formation_view') }}" method="POST" style="margin-bottom: 20px;">
+    <label for="formation">Cambiar formación:</label>
     <select name="formation" id="formation">
-      <option value="4_4_2" {% if formation == '4_4_2' %}selected{% endif %}>4-4-2</option>
-      <option value="4_3_3" {% if formation == '4_3_3' %}selected{% endif %}>4-3-3</option>
-      <option value="3_5_2" {% if formation == '3_5_2' %}selected{% endif %}>3-5-2</option>
-      <option value="5_3_2" {% if formation == '5_3_2' %}selected{% endif %}>5-3-2</option>
-      <option value="4_2_3_1" {% if formation == '4_2_3_1' %}selected{% endif %}>4-2-3-1</option>
+      {% for f in formations %}
+        <option value="{{ f }}" {% if f == formation %}selected{% endif %}>{{ f }}</option>
+      {% endfor %}
     </select>
-    <button type="submit" class="btn">🔄 Actualizar</button>
+    <button class="btn" type="submit">Actualizar</button>
   </form>
 
-  <!-- Campo de juego -->
-  <div class="field formation-{{ formation }}">
-    {% for j in team %}
-    <div class="player-card">
-      <img src="{{ j.foto }}" alt="{{ j.nombre }}">
-      <span>{{ j.nombre }}</span>
-      <p>{{ j.posición }}</p>
-    </div>
+  <!-- Campo de fútbol -->
+  <div class="field formation-{{ formation|replace('-', '_') }}">
+    {% for player in team %}
+      <div class="player-card">
+        <img src="{{ player.foto }}" alt="{{ player.nombre }}">
+        <span>{{ player.nombre }}</span>
+        <p>{{ player.posición }}</p>
+      </div>
     {% endfor %}
   </div>
 
-  <a href="{{ url_for('team_view') }}" class="btn">⬅️ Volver al Equipo</a>
+  <!-- Botones -->
+  <div style="text-align:center; margin-top: 30px;">
+    <a class="btn" href="{{ url_for('team_view') }}">⬅️ Volver al equipo</a>
+    <a class="btn" href="{{ url_for('index') }}">🏠 Inicio</a>
+  </div>
 </body>
 </html>
