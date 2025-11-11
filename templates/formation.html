@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <title>Formación ⚽</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='field.css') }}">
+  <style>
+    .player-card {
+      cursor: grab;
+      transition: left 0.1s, top 0.1s;
+    }
+    .player-card:active {
+      cursor: grabbing;
+    }
+  </style>
 </head>
 <body>
   <h1>⚽ Formación {{ formation }}</h1>
@@ -35,5 +44,46 @@
     <a class="btn" href="{{ url_for('team_view') }}">⬅️ Volver al equipo</a>
     <a class="btn" href="{{ url_for('index') }}">🏠 Inicio</a>
   </div>
+
+  <!-- Script para arrastrar jugadores -->
+  <script>
+    const field = document.querySelector('.field');
+    const players = document.querySelectorAll('.player-card');
+
+    players.forEach(player => {
+      let offsetX, offsetY;
+
+      player.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        const rect = player.getBoundingClientRect();
+        const fieldRect = field.getBoundingClientRect();
+
+        // Calculamos offset relativo a la posición actual
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        function onMouseMove(eMove) {
+          let left = eMove.clientX - fieldRect.left - offsetX;
+          let top = eMove.clientY - fieldRect.top - offsetY;
+
+          // Limitar dentro del campo
+          left = Math.max(0, Math.min(left, fieldRect.width - rect.width));
+          top = Math.max(0, Math.min(top, fieldRect.height - rect.height));
+
+          player.style.left = `${left}px`;
+          player.style.top = `${top}px`;
+          player.style.position = "absolute"; // hacemos absoluto solo al arrastrar
+        }
+
+        function onMouseUp() {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+    });
+  </script>
 </body>
 </html>

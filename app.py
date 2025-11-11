@@ -4,49 +4,64 @@ import json, os
 app = Flask(__name__)
 app.secret_key = "super_secret_key"
 
-# ------------------ Cargar jugadores ------------------
+# ------------------ Funciones de utilidad ------------------
+
 def load_players():
     with open("data/players.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# ------------------ Estadísticas ------------------
+def save_team(team):
+    with open("data/team_saved.json", "w", encoding="utf-8") as f:
+        json.dump(team, f, ensure_ascii=False, indent=2)
+
+def load_team():
+    if os.path.exists("data/team_saved.json"):
+        with open("data/team_saved.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
 def calculate_stats(team):
     if not team:
         return {"ataque": 0, "defensa": 0, "tecnica": 0, "resistencia": 0}
+
+    total = {"ataque": 0, "defensa": 0, "tecnica": 0, "resistencia": 0}
+    for p in team:
+        total["ataque"] += p.get("ataque", 0)
+        total["defensa"] += p.get("defensa", 0)
+        total["tecnica"] += p.get("técnica", 0)
+        total["resistencia"] += p.get("resistencia", 0)
+
     n = len(team)
     return {
-        "ataque": round(sum(p["ataque"] for p in team)/n, 1),
-        "defensa": round(sum(p["defensa"] for p in team)/n, 1),
-        "tecnica": round(sum(p["técnica"] for p in team)/n, 1),
-        "resistencia": round(sum(p["resistencia"] for p in team)/n, 1),
+        "ataque": round(total["ataque"] / n, 1),
+        "defensa": round(total["defensa"] / n, 1),
+        "tecnica": round(total["tecnica"] / n, 1),
+        "resistencia": round(total["resistencia"] / n, 1)
     }
 
 # ------------------ Página principal ------------------
+
 @app.route("/")
 def index():
-    if "team" not in session:
-        session["team"] = []
     players = load_players()
-    team = session["team"]
+    team = session.get("team", load_team())
     stats = calculate_stats(team)
     return render_template("index.html", players=players, team=team, stats=stats)
 
 # ------------------ Explorar jugadores ------------------
+
 @app.route("/explore")
 def explore_players():
-    if "team" not in session:
-        session["team"] = []
     players = load_players()
-    team = session["team"]
+    team = session.get("team", load_team())
     return render_template("explore.html", players=players, team=team)
 
 # ------------------ Añadir jugador ------------------
+
 @app.route("/add/<nombre>")
 def add_to_team(nombre):
-    if "team" not in session:
-        session["team"] = []
-    team = session["team"]
     players = load_players()
+    team = session.get("team", load_team())
 
     if len(team) >= 11:
         return redirect(url_for("team_view"))
@@ -55,58 +70,45 @@ def add_to_team(nombre):
     if player and player not in team:
         team.append(player)
         session["team"] = team
+        save_team(team)
+
     return redirect(url_for("explore_players"))
 
 # ------------------ Quitar jugador ------------------
+
 @app.route("/remove/<nombre>")
 def remove_from_team(nombre):
-    if "team" not in session:
-        session["team"] = []
-    team = session["team"]
+    team = session.get("team", load_team())
     team = [p for p in team if p["nombre"] != nombre]
     session["team"] = team
+    save_team(team)
     return redirect(url_for("team_view"))
 
 # ------------------ Ver equipo ------------------
+
 @app.route("/team")
 def team_view():
-    if "team" not in session:
-        session["team"] = []
-    team = session["team"]
+    team = session.get("team", load_team())
     stats = calculate_stats(team)
-    return render_template("team.html", team=team, avg=stats)
+    return render_template("team.html", team=team, stats=stats)
 
-# ------------------ Ver formación ------------------
+# ------------------ Ver y cambiar formación ------------------
+
 @app.route("/formation", methods=["GET", "POST"])
 def formation_view():
-    if "team" not in session:
-        session["team"] = []
-    team = session["team"]
-
-    # Definir formaciones disponibles
+    team = session.get("team", load_team())
     formations = ["4-4-2", "4-3-3", "3-5-2", "5-3-2"]
-    if "formation" not in session:
-        session["formation"] = "4-4-2"
 
     if request.method == "POST":
         new_formation = request.form.get("formation")
         if new_formation in formations:
             session["formation"] = new_formation
+            return redirect(url_for("formation_view"))
 
-    return render_template(
-        "formation.html",
-        team=team,
-        formation=session["formation"],
-        formations=formations
-    )
-
-# ------------------ Resetear equipo ------------------
-@app.route("/reset_team")
-def reset_team():
-    session["team"] = []
-    session["formation"] = "4-4-2"
-    return redirect(url_for("index"))
+    formation = session.get("formation", "4-4-2")
+    return render_template("formation.html", team=team, formation=formation, formations=formations)
 
 # ------------------ Ejecutar ------------------
+
 if __name__ == "__main__":
     app.run(debug=True)
